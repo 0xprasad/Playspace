@@ -85,6 +85,7 @@ npm run dev
 - `PATCH /api/slots/:slotId/unblock`
 - `POST /api/bookings/online`
   - creates a 15-minute pending booking window before cleanup
+- `POST /api/bookings/online`
 - `POST /api/bookings/offline`
 - `GET /api/bookings`
 - `POST /api/payments/verify`

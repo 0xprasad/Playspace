@@ -2,6 +2,7 @@ import { Router } from 'express';
 import crypto from 'crypto';
 import { z } from 'zod';
 import { env } from '../../config/env.js';
+import { z } from 'zod';
 import { query } from '../../db/mysql.js';
 import { requireAuth } from '../../middleware/auth.js';
 
@@ -30,6 +31,7 @@ router.post('/verify', requireAuth, async (req, res, next) => {
     const bookingRows = await query('SELECT id, amount, status, slot_id, expires_at FROM bookings WHERE id = ?', [
       payload.bookingId
     ]);
+    const bookingRows = await query('SELECT id, amount, status FROM bookings WHERE id = ?', [payload.bookingId]);
     const booking = bookingRows[0];
 
     if (!booking) {
