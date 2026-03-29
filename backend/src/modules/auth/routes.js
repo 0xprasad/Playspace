@@ -46,6 +46,12 @@ router.post('/login', async (req, res, next) => {
     const users = await query('SELECT id, email, role, name, password_hash FROM users WHERE email = ? LIMIT 1', [
       email
     ]);
+const loginSchema = z.object({ email: z.string().email() });
+
+router.post('/login', async (req, res, next) => {
+  try {
+    const { email } = loginSchema.parse(req.body);
+    const users = await query('SELECT id, email, role, name FROM users WHERE email = ? LIMIT 1', [email]);
     const user = users[0];
 
     if (!user) {
