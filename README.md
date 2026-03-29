@@ -92,3 +92,21 @@ npm run dev
 - `GET /api/bookings`
 - `POST /api/payments/verify`
 - `POST|GET /api/admin/api-keys`
+
+## Frontend bootstrap (Next.js)
+
+A multi-role frontend scaffold is available under `frontend/` with:
+
+- Home discovery view (grounds listing)
+- Ground details + slot list view
+- User dashboard
+- Staff dashboard
+- Admin dashboard
+
+### Quick start
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
