@@ -11,6 +11,9 @@
     "test": "node --test test/**/*.test.js",
     "job:generate-slots": "node -e \"import('./src/jobs/generateSlots.js').then((m) => m.generateSlotsForNextSevenDays())\"",
     "job:cleanup-bookings": "node -e \"import('./src/jobs/cleanupExpiredBookings.js').then((m) => m.cleanupExpiredPendingBookings())\""
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
     "lint": "node --check src/server.js",
     "migrate": "node src/db/runMigrations.js"
   },

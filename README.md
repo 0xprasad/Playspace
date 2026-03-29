@@ -78,6 +78,8 @@ npm run dev
 ### API surface (initial)
 
 - `GET /health`
+- `POST /api/auth/register`
+- `POST /api/auth/login` (email + password)
 - `POST /api/auth/login`
 - `GET|POST /api/grounds`
 - `GET /api/slots/:groundId`
