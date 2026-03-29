@@ -80,12 +80,14 @@ npm run dev
 - `GET /health`
 - `POST /api/auth/register`
 - `POST /api/auth/login` (email + password)
+- `POST /api/auth/login`
 - `GET|POST /api/grounds`
 - `GET /api/slots/:groundId`
 - `PATCH /api/slots/:slotId/block`
 - `PATCH /api/slots/:slotId/unblock`
 - `POST /api/bookings/online`
   - creates a 15-minute pending booking window before cleanup
+- `POST /api/bookings/online`
 - `POST /api/bookings/offline`
 - `GET /api/bookings`
 - `POST /api/payments/verify`
