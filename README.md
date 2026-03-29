@@ -51,3 +51,37 @@ SQL migrations are available under `db/migrations`:
 - Add Redis-backed rate limiting and session/token controls.
 - Add Socket.IO event channel for staff-triggered slot updates.
 - Add role-specific Next.js experiences (user/staff/admin dashboards).
+
+## Backend bootstrap (Node.js + Express)
+
+A backend service scaffold is available under `backend/` with modular routes and shared middleware:
+
+- `auth` (JWT login bootstrap)
+- `grounds`
+- `slots`
+- `bookings` (online + offline)
+- `payments` (verification persistence)
+- `api-keys` (issuance + listing)
+
+### Quick start
+
+```bash
+cd backend
+cp .env.example .env
+npm install
+npm run migrate
+npm run dev
+```
+
+### API surface (initial)
+
+- `GET /health`
+- `POST /api/auth/login`
+- `GET|POST /api/grounds`
+- `GET /api/slots/:groundId`
+- `PATCH /api/slots/:slotId/block`
+- `POST /api/bookings/online`
+- `POST /api/bookings/offline`
+- `GET /api/bookings`
+- `POST /api/payments/verify`
+- `POST|GET /api/admin/api-keys`
