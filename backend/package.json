@@ -8,7 +8,9 @@
     "start": "node src/server.js",
     "lint": "find src test -name '*.js' -print0 | xargs -0 -n1 node --check",
     "migrate": "node src/db/runMigrations.js",
-    "test": "node --test test/**/*.test.js"
+    "test": "node --test test/**/*.test.js",
+    "job:generate-slots": "node -e \"import('./src/jobs/generateSlots.js').then((m) => m.generateSlotsForNextSevenDays())\"",
+    "job:cleanup-bookings": "node -e \"import('./src/jobs/cleanupExpiredBookings.js').then((m) => m.cleanupExpiredPendingBookings())\""
   },
   "dependencies": {
     "cors": "^2.8.5",

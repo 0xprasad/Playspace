@@ -1,5 +1,7 @@
 import { Router } from 'express';
+import crypto from 'crypto';
 import { z } from 'zod';
+import { env } from '../../config/env.js';
 import { query } from '../../db/mysql.js';
 import { requireAuth } from '../../middleware/auth.js';
 
@@ -16,11 +18,28 @@ router.post('/verify', requireAuth, async (req, res, next) => {
   try {
     const payload = verifySchema.parse(req.body);
 
-    const bookingRows = await query('SELECT id, amount, status FROM bookings WHERE id = ?', [payload.bookingId]);
+    const generatedSignature = crypto
+      .createHmac('sha256', env.razorpayWebhookSecret)
+      .update(`${payload.razorpayOrderId}|${payload.razorpayPaymentId}`)
+      .digest('hex');
+
+    if (generatedSignature !== payload.razorpaySignature) {
+      return res.status(400).json({ message: 'Invalid Razorpay signature' });
+    }
+
+    const bookingRows = await query('SELECT id, amount, status, slot_id, expires_at FROM bookings WHERE id = ?', [
+      payload.bookingId
+    ]);
     const booking = bookingRows[0];
 
     if (!booking) {
       return res.status(404).json({ message: 'Booking not found' });
+    }
+    if (booking.status !== 'pending') {
+      return res.status(409).json({ message: 'Booking is not pending' });
+    }
+    if (booking.expires_at && new Date(booking.expires_at) < new Date()) {
+      return res.status(409).json({ message: 'Payment window expired' });
     }
 
     await query(
@@ -34,6 +53,8 @@ router.post('/verify', requireAuth, async (req, res, next) => {
       payload.razorpayOrderId,
       booking.id
     ]);
+
+    await query(`UPDATE ground_slots SET status = 'booked' WHERE id = ?`, [booking.slot_id]);
 
     return res.json({ message: 'Payment recorded and booking confirmed' });
   } catch (error) {
