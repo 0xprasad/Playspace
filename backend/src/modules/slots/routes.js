@@ -41,4 +41,21 @@ router.patch('/:slotId/block', requireAuth, requireRole('staff', 'admin'), async
   }
 });
 
+router.patch('/:slotId/unblock', requireAuth, requireRole('staff', 'admin'), async (req, res, next) => {
+  try {
+    const { slotId } = req.params;
+
+    await query(
+      `UPDATE ground_slots
+          SET status = 'available', blocked_reason = NULL
+        WHERE id = ? AND status = 'blocked'`,
+      [slotId]
+    );
+
+    res.json({ message: 'Slot unblocked' });
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default router;

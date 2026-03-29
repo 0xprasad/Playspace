@@ -43,6 +43,8 @@ SQL migrations are available under `db/migrations`:
 4. `004_create_ground_slots.sql`
 5. `005_create_bookings.sql`
 6. `006_create_api_keys.sql`
+7. `007_add_integrity_constraints.sql`
+8. `008_add_booking_expiry.sql`
 
 ## Next Implementation Milestones
 
@@ -80,6 +82,9 @@ npm run dev
 - `GET|POST /api/grounds`
 - `GET /api/slots/:groundId`
 - `PATCH /api/slots/:slotId/block`
+- `PATCH /api/slots/:slotId/unblock`
+- `POST /api/bookings/online`
+  - creates a 15-minute pending booking window before cleanup
 - `POST /api/bookings/online`
 - `POST /api/bookings/offline`
 - `GET /api/bookings`

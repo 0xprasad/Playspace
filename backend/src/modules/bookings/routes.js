@@ -31,6 +31,17 @@ router.post('/online', requireAuth, requireRole('user', 'admin'), async (req, re
       [req.user.id, slot.id, slot.ground_id, slot.price]
     );
 
+    await conn.execute(`UPDATE bookings SET expires_at = DATE_ADD(created_at, INTERVAL 15 MINUTE) WHERE id = ?`, [
+      bookingResult.insertId
+    ]);
+
+    await conn.execute(`UPDATE ground_slots SET status = 'booked' WHERE id = ?`, [slotId]);
+
+    await conn.commit();
+    return res.status(201).json({
+      bookingId: bookingResult.insertId,
+      paymentWindowMinutes: 15
+    });
     await conn.execute(`UPDATE ground_slots SET status = 'booked' WHERE id = ?`, [slotId]);
 
     await conn.commit();
